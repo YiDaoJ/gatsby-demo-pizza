@@ -16,8 +16,18 @@ const turnPizzasIntoPages = async ({ graphql, actions }) => {
       }
     }
   `);
-  console.log(data);
   // 3. loop over each pizza and create a page for that pizza
+  data.pizzas.nodes.forEach((pizza) => {
+    actions.createPage({
+      // page url
+      path: `pizza/${pizza.slug.current}`,
+      component: pizzaTemplate,
+      context: {
+        slug: pizza.slug.current,
+      },
+    });
+    console.log('create a page for: ', pizza.name);
+  });
 };
 
 export const createPages = async (params) => {
