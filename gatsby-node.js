@@ -26,15 +26,50 @@ const turnPizzasIntoPages = async ({ graphql, actions }) => {
         slug: pizza.slug.current,
       },
     });
-    console.log('create a page for: ', pizza.name);
+    // console.log('create a page for: ', pizza.name);
   });
+};
+
+const turnToppingIntoPages = async ({ graphql, actions }) => {
+  // 1. Get the template
+  const toppingTemplate = resolve(`./src/pages/pizzas.js`);
+  // 2. query all the toppings
+  const { data } = await graphql(`
+    query {
+      toppings: allSanityTopping {
+        nodes {
+          name
+          id
+          vegetarian
+        }
+      }
+    }
+  `);
+  // 3. createPage for that topping
+  data.toppings.nodes.forEach((topping) => {
+    actions.createPage({
+      // page url
+      path: `topping/${topping.name}`,
+      component: toppingTemplate,
+      context: {
+        topping: topping.name,
+        toppingRegex: `/${topping.name}/i`,
+      },
+    });
+  });
+  // 4. Pass topping data to pizza.js
 };
 
 export const createPages = async (params) => {
   // create pages dynamically
   // 1. pizzas
-  await turnPizzasIntoPages(params);
   // 2. Toppings
+  // wait for all promises to be resolved before finishing this function
+  await Promise.all([
+    turnPizzasIntoPages(params),
+    turnToppingIntoPages(params),
+  ]);
+
   // 3. Slicemasters
   console.log(`_____________ create pages`);
 };
