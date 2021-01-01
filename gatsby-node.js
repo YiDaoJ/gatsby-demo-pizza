@@ -1,4 +1,5 @@
 import { resolve } from 'path';
+import fetch from 'isomorphic-fetch';
 
 const turnPizzasIntoPages = async ({ graphql, actions }) => {
   // 1. get a template for this page
@@ -58,6 +59,40 @@ const turnToppingIntoPages = async ({ graphql, actions }) => {
     });
   });
   // 4. Pass topping data to pizza.js
+};
+
+const fetchBeersAndTurnIntoNodes = async ({
+  actions,
+  createNodeId,
+  createContentDigest,
+}) => {
+  console.log('🍺 turn beers into nodes');
+  // 1. Fetch the list of beers
+  const res = await fetch('https://sampleapis.com/beers/api/ale');
+  const beers = await res.json();
+
+  // 2. loop over each one
+  for (const beer of beers) {
+    // create a node for each beer
+    // const nodeContent = JSON.stringify(beer);
+    const nodeMeta = {
+      id: createNodeId(`beer-${beer.name}`),
+      parent: null,
+      children: [],
+      internal: {
+        type: 'Beer',
+        mediaType: 'application/json',
+        contentDigest: createContentDigest(beer),
+      },
+    };
+    // 3. create a node for that beer
+    actions.createNode({ ...beer, ...nodeMeta });
+  }
+};
+
+export const sourceNodes = async (params) => {
+  // fetch a list of beers and source them into our gatsby API
+  await Promise.all([fetchBeersAndTurnIntoNodes(params)]);
 };
 
 export const createPages = async (params) => {
