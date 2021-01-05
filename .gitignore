@@ -1,5 +1,4 @@
 .cache
 node_modules
 .env
-public
-/public
+public/page-data
