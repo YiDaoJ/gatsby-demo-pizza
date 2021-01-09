@@ -7,7 +7,6 @@ export default {
   pathPrefix: '/pizza',
   siteMetadata: {
     title: `Slicks Slices`,
-    siteUrl: 'https://gatsby.pizza',
     description: 'The best pizza place in Duesseldorf!',
   },
   plugins: [
