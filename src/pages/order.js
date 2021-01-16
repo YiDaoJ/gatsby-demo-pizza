@@ -9,6 +9,7 @@ import OrderStyles from '../styles/OrderStyles';
 import MenuItemStyles from '../styles/MenuItemStyles';
 import usePizza from '../utils/usePizza';
 import PizzaOrder from '../components/PizzaOrder';
+import calculateOrderTotal from '../utils/calculateOrderTotal';
 
 export default function OrdersPage({ data }) {
   const pizzas = data.pizzas.nodes;
@@ -74,6 +75,10 @@ export default function OrdersPage({ data }) {
             removeFromOrder={removeFromOrder}
             pizzas={pizzas}
           />
+        </fieldset>
+        <fieldset>
+          <h3>Your Total is {calculateOrderTotal(order, pizzas)}</h3>
+          <button type="submit">Order Ahead</button>
         </fieldset>
       </OrderStyles>
     </>
