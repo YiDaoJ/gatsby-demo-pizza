@@ -29,7 +29,13 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+const wait = (ms = 0) =>
+  new Promise((resolve, reject) => {
+    setTimeout(resolve, ms);
+  });
+
 exports.handler = async (event, context) => {
+  // await wait(5000);
   const body = JSON.parse(event.body);
   console.log('body: ', body);
   // validate the data coming in is correct
@@ -45,6 +51,16 @@ exports.handler = async (event, context) => {
         }),
       };
     }
+  }
+
+  // make sure they actually have items in that order
+  if (!body.order.length) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({
+        message: `Why would you order nothing?`,
+      }),
+    };
   }
 
   // Send the success or error message

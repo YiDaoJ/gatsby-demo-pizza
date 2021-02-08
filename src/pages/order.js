@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { graphql } from 'gatsby';
 import React from 'react';
 import Img from 'gatsby-image';
@@ -25,13 +26,13 @@ export default function OrdersPage({ data }) {
   } = usePizza({ pizzas, values });
 
   if (message) {
-    return <p>message</p>;
+    return <p>{message}</p>;
   }
   return (
     <>
       <SEO title="Order a Pizza!" />
       <OrderStyles onSubmit={submitOrder}>
-        <fieldset>
+        <fieldset disabled={loading}>
           <legend>Your Info</legend>
           <label htmlFor="name">Name</label>
           <input
@@ -48,7 +49,7 @@ export default function OrdersPage({ data }) {
             onChange={updateValue}
           />
         </fieldset>
-        <fieldset className="menu">
+        <fieldset className="menu" disabled={loading}>
           <legend>Menu</legend>
           {pizzas.map((pizza) => (
             <MenuItemStyles key={pizza.id}>
@@ -79,7 +80,7 @@ export default function OrdersPage({ data }) {
             </MenuItemStyles>
           ))}
         </fieldset>
-        <fieldset className="order">
+        <fieldset className="order" disabled={loading}>
           <legend>Order</legend>
           <PizzaOrder
             order={order}
@@ -87,7 +88,7 @@ export default function OrdersPage({ data }) {
             pizzas={pizzas}
           />
         </fieldset>
-        <fieldset>
+        <fieldset disabled={loading}>
           <h3>Your Total is {calculateOrderTotal(order, pizzas)}</h3>
           <div>{error ? <p>Error: {error}</p> : ''}</div>
           <button type="submit" disabled={loading}>
