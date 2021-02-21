@@ -78,7 +78,7 @@ const GlobalStyles = createGlobalStyle`
   .tilt {
     transform: rotate(-2deg);
     position: relative;
-    display: inline-block;
+    display: inline;
   }
 
 `;
